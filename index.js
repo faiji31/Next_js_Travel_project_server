@@ -2,7 +2,7 @@ import dns from "node:dns";
 import express from "express";
 import dotenv from 'dotenv'
 import cors from 'cors'
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
@@ -29,10 +29,18 @@ export async function connectToMongoDB() {
 
     const db= client.db('wanderlust')
     const destinationCollection = db.collection('destination')
-
+ 
 
     app.get('/destination',async(req,res)=>{
       const result = await destinationCollection.find().toArray()
+      res.json(result)
+    })
+
+    app.get('/destination/:id',async(req,res)=>{
+      const {id} = req.params
+
+      const result = await destinationCollection.findOne({_id: new ObjectId(id)})
+
       res.json(result)
     })
 
