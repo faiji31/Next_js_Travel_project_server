@@ -43,6 +43,22 @@ export async function connectToMongoDB() {
 
       res.json(result)
     })
+    app.patch('/destination/:id',async(req,res)=>{
+       const {id} = req.params
+       const updatedData = req.body
+       console.log(updatedData)
+       const result = await destinationCollection.updateOne({_id: new ObjectId(id)},
+      {
+        $set:updatedData
+      })
+
+      res.json(result)
+    })
+    app.delete('/destination/:id',async(req,res)=>{
+      const {id} = req.params
+      const result = await destinationCollection.deleteOne({_id: new ObjectId(id)})
+      res.json(result)
+    })
 
     app.post('/destination',async(req,res)=>{
       const destinationData = req.body
